@@ -1,0 +1,9 @@
+/target
+/src/old/
+**/*.rs.bk
+Cargo.lock
+**/*.rs.bk
+.vscode/
+**/*.swp
+.rustup/
+.cargo/
