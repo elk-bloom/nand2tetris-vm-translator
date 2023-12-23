@@ -16,6 +16,27 @@ pub enum ParserError {
     },
 }
 
+impl ParserError {
+    pub fn from_io_error(file_name: String, error: std::io::Error) -> Self {
+        ParserError::Io {
+            file_name,
+            e: error,
+        }
+    }
+
+    pub fn from_translation_error(
+        file_name: String,
+        line_number: u32,
+        error: TranslationError,
+    ) -> Self {
+        ParserError::Translation {
+            file_name,
+            line_number,
+            e: error,
+        }
+    }
+}
+
 impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
