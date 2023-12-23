@@ -14,17 +14,13 @@ impl ToAssembly for CommandPop {
             | Segment::This
             | Segment::That
             | Segment::Pointer => {
-                let segment_name: &str = match self.segment {
-                    Segment::Argument => "ARG",
-                    Segment::Local => "LCL",
-                    Segment::This => "THIS",
-                    Segment::That => "THAT",
+                let segment_name: String = match self.segment {
                     Segment::Pointer => match self.offset {
-                        0 => "THIS",
-                        1 => "THAT",
-                        _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°)
+                        0 => Segment::Argument.to_assembly(),
+                        1 => Segment::That.to_assembly(),
+                        _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°) TODO: handle error case
                     },
-                    _ => unreachable!(),
+                    _ => self.segment.to_assembly(),
                 };
 
                 cpu_state.clear();

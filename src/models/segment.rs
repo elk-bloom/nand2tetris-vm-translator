@@ -14,7 +14,7 @@ pub enum Segment {
 }
 
 impl Segment {
-    fn to_assembly(&self) -> String {
+    pub fn to_assembly(&self) -> String {
         match self {
             Segment::Argument => "ARG".to_string(),
             Segment::Local => "LCL".to_string(),
