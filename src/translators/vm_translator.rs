@@ -1,13 +1,8 @@
-use std::str::FromStr;
-
 use crate::{
-    errors::{
-        parse_offset_error::ParseOffsetError, translation_error::TranslationError,
-        vm_translation_error::VMTranslationError,
-    },
+    errors::{translation_error::TranslationError, vm_translation_error::VMTranslationError},
     models::{
-        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_push::CommandPush, command_type::CommandType,
-        cpu_state::CPUState, segment::Segment, to_assembly::ToAssembly,
+        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_push::CommandPush,
+        command_type::CommandType, cpu_state::CPUState, segment::Segment, to_assembly::ToAssembly,
     },
 };
 
@@ -87,7 +82,7 @@ impl VMTranslator {
             })
     }
 
-    fn get_arg_1(&self, split_vm_instruction: &Vec<&str>) -> Result<String, VMTranslationError> {
+    fn get_arg_1(&self, split_vm_instruction: &[&str]) -> Result<String, VMTranslationError> {
         split_vm_instruction
             .get(1)
             .map(|s| s.to_string())
@@ -98,7 +93,7 @@ impl VMTranslator {
             })
     }
 
-    fn get_arg_2(&self, split_vm_instruction: &Vec<&str>) -> Result<String, VMTranslationError> {
+    fn get_arg_2(&self, split_vm_instruction: &[&str]) -> Result<String, VMTranslationError> {
         split_vm_instruction
             .get(2)
             .map(|s| s.to_string())

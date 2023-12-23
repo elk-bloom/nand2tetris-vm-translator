@@ -1,0 +1,54 @@
+use std::fs::File;
+use std::io::{self, BufRead, BufReader};
+use std::path::Path;
+
+use crate::errors::translation_error::TranslationError;
+use crate::translators::translator_traits;
+
+pub struct Parser<T: translator_traits::Translate> {
+    reader: BufReader<File>,
+    translator: T,
+    current_line: String,
+    pub current_line_number: u32,
+}
+
+impl<T: translator_traits::Translate> Parser<T> {
+    pub fn new<P: AsRef<Path>>(file_path: P, translator: T) -> io::Result<Self> {
+        let file = File::open(file_path)?;
+        let reader = BufReader::new(file);
+        Ok(Parser {
+            reader,
+            translator,
+            current_line: String::new(),
+            current_line_number: 0,
+        })
+    }
+
+    /// A return value of > 0 indicates that that many lines were read.
+    /// A return value of 0 indicates that no lines were read due to EOF, the caller should know to stop.
+    fn advance(&mut self) -> io::Result<u32> {
+        self.current_line.clear();
+        let mut line = String::new();
+        let mut lines_read = 0;
+
+        loop {
+            let result = self.reader.read_line(&mut line);
+            let bytes_read = result?;
+            if bytes_read == 0 {
+                return Ok(0);
+            }
+            lines_read += 1;
+            self.current_line_number += 1;
+            let content_before_comment = line.split("//").next().unwrap_or_default().trim();
+            if !content_before_comment.is_empty() {
+                self.current_line.push_str(content_before_comment);
+                return Ok(lines_read);
+            }
+            line.clear();
+        }
+    }
+
+    pub fn translate(&mut self) -> Result<Option<String>, TranslationError> {
+        let lines_read = self.advance()?;
+    }
+}

@@ -1,5 +1,4 @@
-use super::{to_assembly::ToAssembly, command_push_stack::PushStack, segment::Segment};
-
+use super::{command_push_stack::PushStack, segment::Segment, to_assembly::ToAssembly};
 
 pub struct CommandPush {
     pub segment: Segment,
@@ -8,7 +7,7 @@ pub struct CommandPush {
 
 impl ToAssembly for CommandPush {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
-        // the PushStack::to_assembly handles the update of cpu_state since it 
+        // the PushStack::to_assembly handles the update of cpu_state since it
         // appears last in all of our assembly for CommandPush
         let push_stack_assembly = PushStack::to_assembly(cpu_state);
         match self.segment {
@@ -25,38 +24,41 @@ impl ToAssembly for CommandPush {
                     Segment::Pointer => match self.offset {
                         0 => "THIS",
                         1 => "THAT",
-                        _ => unreachable!() // or it should be anyway :lenny_face:
+                        _ => unreachable!(), // or it should be anyway :lenny_face:
                     },
                     _ => unreachable!(),
                 };
-                
+
                 if self.offset == 0 {
                     format!(
                         "\
                         @{}
                         A=M
                         D=M
-                        {}", segment_name, push_stack_assembly
-                    )                    
+                        {}",
+                        segment_name, push_stack_assembly
+                    )
                 } else {
-                   format!(
-                    "\
+                    format!(
+                        "\
                     @{}
                     D=A
                     @{}
                     A=D+M
                     D=M
-                    {}", self.offset, segment_name, push_stack_assembly
-                   ) 
+                    {}",
+                        self.offset, segment_name, push_stack_assembly
+                    )
                 }
             }
             Segment::Constant => {
                 format!(
-                "\
+                    "\
                 @{}
                 D=M
-                {}", self.offset, push_stack_assembly 
-            )
+                {}",
+                    self.offset, push_stack_assembly
+                )
             }
             Segment::Temp => {
                 // TODO: return error if outside of bounds
@@ -65,7 +67,8 @@ impl ToAssembly for CommandPush {
                     "\
                     @{}
                     D=M
-                    {}", index, push_stack_assembly
+                    {}",
+                    index, push_stack_assembly
                 )
             }
             Segment::Static => {
@@ -75,7 +78,8 @@ impl ToAssembly for CommandPush {
                     "\
                     @{}
                     D=M
-                    {}", symbol, push_stack_assembly
+                    {}",
+                    symbol, push_stack_assembly
                 )
             }
         }

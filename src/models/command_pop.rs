@@ -63,7 +63,7 @@ impl ToAssembly for CommandPop {
             Segment::Temp => {
                 // TODO: return error if outside of bounds
                 let index = 5 + self.offset;
-                
+
                 cpu_state.clear();
                 cpu_state
                     .const_or_predefined_a_register
@@ -80,15 +80,18 @@ impl ToAssembly for CommandPop {
             Segment::Static => {
                 // TODO: ensure number of static variables is not greater than the reserved address space (16-255) can hold
                 let symbol = format!("{}.{}", cpu_state.loop_label_name, self.offset);
-                
+
                 cpu_state.clear();
-                cpu_state.const_or_predefined_a_register.push_str(symbol.as_str());
-                
+                cpu_state
+                    .const_or_predefined_a_register
+                    .push_str(symbol.as_str());
+
                 format!(
                     "\
                     {}
                     @{}
-                    M=D", pop_stack_assembly, symbol
+                    M=D",
+                    pop_stack_assembly, symbol
                 )
             }
             Segment::Constant => {
