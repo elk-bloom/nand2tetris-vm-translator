@@ -7,6 +7,7 @@ pub struct CommandPop {
 
 impl ToAssembly for CommandPop {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
+        let pop_stack_assembly = PopStack::to_assembly(cpu_state);
         match self.segment {
             Segment::Argument
             | Segment::Local
@@ -23,10 +24,8 @@ impl ToAssembly for CommandPop {
                         1 => "THAT",
                         _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°)
                     },
-
                     _ => unreachable!(),
                 };
-                let pop_stack_assembly = PopStack::to_assembly(cpu_state);
 
                 cpu_state.clear();
 
@@ -64,7 +63,6 @@ impl ToAssembly for CommandPop {
             Segment::Temp => {
                 // TODO: return error if outside of bounds
                 let index = 5 + self.offset;
-                let pop_stack_assembly = PopStack::to_assembly(cpu_state);
 
                 cpu_state.const_or_predefined_a_register.clear();
                 cpu_state
@@ -81,7 +79,14 @@ impl ToAssembly for CommandPop {
                 )
             }
             Segment::Static => {
-                todo!()
+                // TODO: ensure number of static variables is not greater than the reserved address space (16-255) can hold
+                let symbol = format!("{}.{}", cpu_state.loop_label_name, self.offset);
+                format!(
+                    "\
+                    {}
+                    @{}
+                    M=D", pop_stack_assembly, symbol
+                )
             }
             Segment::Constant => {
                 // TODO: make this function return a result I guess

@@ -6,7 +6,7 @@ use crate::{
         vm_translation_error::VMTranslationError,
     },
     models::{
-        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_type::CommandType,
+        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_push::CommandPush, command_type::CommandType,
         cpu_state::CPUState, segment::Segment, to_assembly::ToAssembly,
     },
 };
@@ -47,7 +47,10 @@ impl Translate for VMTranslator {
                         })?;
 
                 match command_type {
-                    CommandType::Push => todo!(),
+                    CommandType::Push => {
+                        let command_push = CommandPush { segment, offset };
+                        Ok(command_push.to_assembly(&mut self.cpu_state))
+                    }
                     CommandType::Pop => {
                         let command_pop = CommandPop { segment, offset };
                         Ok(command_pop.to_assembly(&mut self.cpu_state))

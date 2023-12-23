@@ -3,7 +3,7 @@ use super::cpu_state::RegisterType;
 pub struct PushStack {}
 
 impl PushStack {
-    fn to_assembly(cpu_state: &mut super::cpu_state::CPUState) -> String {
+    pub fn to_assembly(cpu_state: &mut super::cpu_state::CPUState) -> String {
         let prefix: Option<String> = cpu_state.get_prefix("SP", &RegisterType::A);
         let main_assembly = "\
         A=M
