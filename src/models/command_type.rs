@@ -2,8 +2,8 @@ use std::str::FromStr;
 
 use crate::errors::parse_command_error::ParseCommandError;
 
-pub enum Command {
-    Arithmetic(ArithmeticCommand),
+pub enum CommandType {
+    Arithmetic(ArithmeticCommandType),
     Push,
     Pop,
     Label,
@@ -14,7 +14,7 @@ pub enum Command {
     Call,
 }
 
-pub enum ArithmeticCommand {
+pub enum ArithmeticCommandType {
     Add,
     Sub,
     Neg,
@@ -26,20 +26,20 @@ pub enum ArithmeticCommand {
     Not,
 }
 
-impl FromStr for Command {
+impl FromStr for CommandType {
     type Err = ParseCommandError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "add" | "sub" | "neg" | "eq" | "gt" | "lt" | "and" | "or" | "not" => {
-                Ok(Command::Arithmetic(s.parse().map_err(|_| {
+                Ok(CommandType::Arithmetic(s.parse().map_err(|_| {
                     ParseCommandError {
                         command: s.to_string(),
                     }
                 })?))
             }
-            "push" => Ok(Command::Push),
-            "pop" => Ok(Command::Pop),
+            "push" => Ok(CommandType::Push),
+            "pop" => Ok(CommandType::Pop),
             _ => Err(ParseCommandError {
                 command: s.to_string(),
             }),
@@ -47,20 +47,20 @@ impl FromStr for Command {
     }
 }
 
-impl FromStr for ArithmeticCommand {
+impl FromStr for ArithmeticCommandType {
     type Err = ParseCommandError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "add" => Ok(ArithmeticCommand::Add),
-            "sub" => Ok(ArithmeticCommand::Sub),
-            "neg" => Ok(ArithmeticCommand::Neg),
-            "eq" => Ok(ArithmeticCommand::Eq),
-            "gt" => Ok(ArithmeticCommand::Gt),
-            "lt" => Ok(ArithmeticCommand::Lt),
-            "and" => Ok(ArithmeticCommand::And),
-            "or" => Ok(ArithmeticCommand::Or),
-            "not" => Ok(ArithmeticCommand::Not),
+            "add" => Ok(ArithmeticCommandType::Add),
+            "sub" => Ok(ArithmeticCommandType::Sub),
+            "neg" => Ok(ArithmeticCommandType::Neg),
+            "eq" => Ok(ArithmeticCommandType::Eq),
+            "gt" => Ok(ArithmeticCommandType::Gt),
+            "lt" => Ok(ArithmeticCommandType::Lt),
+            "and" => Ok(ArithmeticCommandType::And),
+            "or" => Ok(ArithmeticCommandType::Or),
+            "not" => Ok(ArithmeticCommandType::Not),
             _ => Err(ParseCommandError {
                 command: s.to_string(),
             }),

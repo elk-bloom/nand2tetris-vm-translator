@@ -1,2 +1,15 @@
-pub mod command;
+pub mod command_arithmetic;
+pub mod command_call;
+pub mod command_function;
+pub mod command_goto;
+pub mod command_if;
+pub mod command_label;
+pub mod command_pop;
+mod command_pop_stack;
+pub mod command_push;
+mod command_push_stack;
+pub mod command_return;
+pub mod command_type;
+pub mod cpu_state;
 pub mod segment;
+pub mod to_assembly;

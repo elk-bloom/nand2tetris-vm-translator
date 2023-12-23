@@ -5,48 +5,58 @@ use crate::{
         parse_offset_error::ParseOffsetError, translation_error::TranslationError,
         vm_translation_error::VMTranslationError,
     },
-    models::{command::Command, segment::Segment},
+    models::{
+        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_type::CommandType,
+        cpu_state::CPUState, segment::Segment, to_assembly::ToAssembly,
+    },
 };
 
 use super::translator_traits::Translate;
 
 pub struct VMTranslator {
     current_vm_instruction: String,
-    last_a_register: u32,
-    last_d_register: u32,
+    cpu_state: CPUState,
 }
 
 impl Translate for VMTranslator {
-    fn convert(&self, vm_instruction: &str) -> Result<String, TranslationError> {
+    fn convert(&mut self, vm_instruction: &str) -> Result<String, TranslationError> {
         let split_vm_instruction = self.split_vm_instruction(vm_instruction);
 
         // from vm_instruction, identify command type (map to a command enum)
-        let command = self.get_command_type(&split_vm_instruction)?;
+        let command_type = self.get_command_type(&split_vm_instruction)?;
         // if the command type uses a segment, identify the segment (taking the first argument)
-        match command {
-            Command::Arithmetic(arithmetic_command) => {
-                // TODO: write arithmetic command
-                Ok("asdf".to_string())
+        match command_type {
+            CommandType::Arithmetic(arithmetic_command_type) => {
+                let command_arithmetic = CommandArithmetic {
+                    arithmetic_command_type,
+                };
+                Ok(command_arithmetic.to_assembly(&mut self.cpu_state))
             }
-            Command::Push | Command::Pop => {
+            CommandType::Push | CommandType::Pop => {
                 let arg_1 = self.get_arg_1(&split_vm_instruction)?;
-                let segment = self.get_segment(arg_1)?;
+                let segment = self.get_segment(&arg_1)?;
                 let arg_2 = self.get_arg_2(&split_vm_instruction)?;
                 let offset: u32 =
                     arg_2
-                        .parse()
-                        .unwrap_or_else(|_| Err(VMTranslationError::InvalidArgument {
-                            vm_instruction: self.current_vm_instruction,
+                        .parse::<u32>()
+                        .map_err(|_| VMTranslationError::InvalidArgument {
+                            vm_instruction: self.current_vm_instruction.clone(),
                             command: split_vm_instruction[0].to_string(),
                             argument_number: 2,
                             argument: split_vm_instruction[2].to_string(),
-                        }))?;
-                
-            }
-        }
-        // if the command type expects a second argument, extract the second argument
+                        })?;
 
-        // it might make sense to just extract all arguments at once. If there are more than expected we can return an error. If there are less than expected or they are invalid we can also return an error.
+                match command_type {
+                    CommandType::Push => todo!(),
+                    CommandType::Pop => {
+                        let command_pop = CommandPop { segment, offset };
+                        Ok(command_pop.to_assembly(&mut self.cpu_state))
+                    }
+                    _ => unreachable!(),
+                }
+            }
+            _ => todo!(),
+        }
     }
 }
 
@@ -60,7 +70,7 @@ impl VMTranslator {
     fn get_command_type(
         &self,
         split_vm_instruction: &Vec<&str>,
-    ) -> Result<Command, VMTranslationError> {
+    ) -> Result<CommandType, VMTranslationError> {
         if split_vm_instruction.is_empty() {
             return Err(VMTranslationError::EmptyInstruction);
         }
