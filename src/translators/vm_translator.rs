@@ -56,9 +56,30 @@ impl Translate for VMTranslator {
             _ => todo!(),
         }
     }
+
+    fn termination_string(&mut self) -> Option<String> {
+        let loop_label_name = self.cpu_state.loop_label_name.as_str();
+        let index = self.cpu_state.loop_label_count;
+        let jump_label = format!("{}.{}", loop_label_name, index);
+        self.cpu_state.loop_label_count += 1;
+
+        Some(format!(
+            "\
+            ({})
+            @{}
+            0;JMP",
+            jump_label, jump_label
+        ))
+    }
 }
 
 impl VMTranslator {
+    pub fn new() -> Self {
+        VMTranslator {
+            current_vm_instruction: String::new(),
+            cpu_state: CPUState::new(),
+        }
+    }
     /// Splits the current vm_instruction string on whitespace so that the command type and arguments are easily determinable by other functions without them having to do their own splitting.
     fn split_vm_instruction<'a>(&self, vm_instruction: &'a str) -> Vec<&'a str> {
         vm_instruction.split_whitespace().collect()
@@ -76,7 +97,7 @@ impl VMTranslator {
         let command = split_vm_instruction[0];
         command
             .parse()
-            .map_err(|e| VMTranslationError::InvalidCommand {
+            .map_err(|_| VMTranslationError::InvalidCommand {
                 vm_instruction: self.current_vm_instruction.to_string(),
                 command: command.to_string(),
             })
@@ -107,7 +128,7 @@ impl VMTranslator {
     fn get_segment(&self, arg_1: &str) -> Result<Segment, VMTranslationError> {
         arg_1
             .parse()
-            .map_err(|e| VMTranslationError::InvalidSegment {
+            .map_err(|_| VMTranslationError::InvalidSegment {
                 vm_instruction: self.current_vm_instruction.to_string(),
                 segment: arg_1.to_string(),
             })

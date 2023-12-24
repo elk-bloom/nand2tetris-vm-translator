@@ -14,7 +14,7 @@ pub struct Parser<T: translator_traits::Translate> {
 }
 
 impl<T: translator_traits::Translate> Parser<T> {
-    pub fn new<P: AsRef<Path>>(file_path: P, translator: T) -> io::Result<Self> {
+    pub fn new<P: AsRef<Path>>(file_path: P, translator: T) -> Result<Parser<T>, ParserError> {
         let file_path_buf = file_path.as_ref().to_path_buf();
         let file_name = file_path_buf
             .file_name()
@@ -22,7 +22,8 @@ impl<T: translator_traits::Translate> Parser<T> {
             .to_string_lossy()
             .to_string();
 
-        let file = File::open(&file_path_buf)?;
+        let file = File::open(&file_path_buf)
+            .map_err(|e| ParserError::from_io_error(file_name.clone(), e))?;
         let reader = BufReader::new(file);
         Ok(Parser {
             file_name,
@@ -76,5 +77,9 @@ impl<T: translator_traits::Translate> Parser<T> {
                 )
             })
             .map(Some)
+    }
+
+    pub fn get_termination_string(&mut self) -> Option<String> {
+        self.translator.termination_string()
     }
 }

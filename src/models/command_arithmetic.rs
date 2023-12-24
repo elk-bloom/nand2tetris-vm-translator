@@ -83,9 +83,8 @@ impl ToAssembly for CommandArithmetic {
                 let false_jump_label = format!("{}.{}", loop_label_name, index + 1);
                 cpu_state.loop_label_count += 2;
 
-                cpu_state.const_or_predefined_a_register.clear();
+                cpu_state.clear();
                 cpu_state.const_or_predefined_a_register.push_str("SP");
-                cpu_state.const_or_predefined_d_register.clear();
 
                 format!(
                     "\

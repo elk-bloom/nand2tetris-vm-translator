@@ -15,6 +15,16 @@ pub enum RegisterType {
 }
 
 impl CPUState {
+    pub fn new() -> Self {
+        CPUState {
+            const_or_predefined_a_register: String::new(),
+            const_or_predefined_d_register: String::new(),
+            loop_label_name: String::new(),
+            loop_label_count: 0,
+            static_variable_prefix: String::new(),
+        }
+    }
+
     pub fn get_prefix(
         &self,
         necessary_value: &str,
