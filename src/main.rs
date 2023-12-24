@@ -92,15 +92,18 @@ fn main() {
         };
         let out_path = file.with_extension(target_extension);
         let mut writer = CodeWriter::new(out_path).unwrap();
-        let translated_line: Option<String> = parser.translate().unwrap();
-        match translated_line {
-            None => {
-                let termination_string = parser.get_termination_string();
-                if let Some(s) = termination_string {
-                    writer.write(s.as_str()).unwrap()
+        loop {
+            let translated_line: Option<String> = parser.translate().unwrap();
+            match translated_line {
+                None => {
+                    let termination_string = parser.get_termination_string();
+                    if let Some(s) = termination_string {
+                        writer.write(s.as_str()).unwrap();
+                    }
+                    break;
                 }
+                Some(s) => writer.write(s.as_str()).unwrap(),
             }
-            Some(s) => writer.write(s.as_str()).unwrap(),
         }
     }
 }
