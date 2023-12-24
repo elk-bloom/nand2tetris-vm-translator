@@ -6,10 +6,8 @@ impl PopStack {
     pub fn to_assembly(cpu_state: &mut super::cpu_state::CPUState) -> String {
         let prefix: Option<String> = cpu_state.get_prefix("SP", &RegisterType::A);
         let main_assembly = "\
-        A=M\n\
-        M=D\n\
-        @SP\n\
-        M=M+1\n";
+        AM=M-1\n\
+        D=M\n";
 
         cpu_state.clear();
 

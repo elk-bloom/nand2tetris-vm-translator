@@ -1,8 +1,13 @@
 use crate::{
     errors::{translation_error::TranslationError, vm_translation_error::VMTranslationError},
     models::{
-        command_arithmetic::CommandArithmetic, command_pop::CommandPop, command_push::CommandPush,
-        command_type::CommandType, cpu_state::CPUState, segment::Segment, to_assembly::ToAssembly,
+        command_arithmetic::CommandArithmetic,
+        command_pop::CommandPop,
+        command_push::CommandPush,
+        command_type::CommandType,
+        cpu_state::{CPUState, CPUStateBuilder},
+        segment::Segment,
+        to_assembly::ToAssembly,
     },
 };
 
@@ -77,7 +82,7 @@ impl VMTranslator {
     pub fn new(file_name: String) -> Self {
         VMTranslator {
             current_vm_instruction: String::new(),
-            cpu_state: CPUState::new(file_name),
+            cpu_state: CPUStateBuilder::new().loop_label_name(file_name).build(),
         }
     }
     /// Splits the current vm_instruction string on whitespace so that the command type and arguments are easily determinable by other functions without them having to do their own splitting.

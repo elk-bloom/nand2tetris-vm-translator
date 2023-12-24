@@ -110,3 +110,397 @@ impl ToAssembly for CommandArithmetic {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::cpu_state::CPUState;
+
+    mod setup {
+        use crate::models::cpu_state::CPUStateBuilder;
+
+        use super::*;
+
+        const DEFAULT_FILENAME: &str = "default";
+
+        pub fn cpu_state_with_sp() -> CPUState {
+            CPUStateBuilder::new()
+                .a_register("SP".to_string())
+                .loop_label_name(DEFAULT_FILENAME.to_string())
+                .build()
+        }
+
+        pub fn empty_cpu_state() -> CPUState {
+            CPUStateBuilder::new()
+                .loop_label_name(DEFAULT_FILENAME.to_string())
+                .build()
+        }
+    }
+
+    #[test]
+    fn neg() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Neg,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        A=M-1\n\
+        M=-M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn not() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Not,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        A=M-1\n\
+        M=!M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn add() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Add,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=M+D\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn sub() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Sub,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=M-D\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn and() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::And,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=D&M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn or() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Or,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=D|M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn eq() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Eq,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JEQ\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn gt() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Gt,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JGT\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn lt() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Lt,
+        };
+        let result = ca.to_assembly(&mut setup::empty_cpu_state());
+
+        let expected_result = "\
+        @SP\n\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JLT\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn neg_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Neg,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        A=M-1\n\
+        M=-M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn not_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Not,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        A=M-1\n\
+        M=!M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn add_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Add,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=M+D\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn sub_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Sub,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=M-D\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn and_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::And,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=D&M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn or_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Or,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        A=M-1\n\
+        M=D|M\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn eq_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Eq,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JEQ\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn gt_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Gt,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JGT\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+
+    #[test]
+    fn lt_sp() {
+        let ca = CommandArithmetic {
+            arithmetic_command_type: ArithmeticCommandType::Lt,
+        };
+        let result = ca.to_assembly(&mut setup::cpu_state_with_sp());
+
+        let expected_result = "\
+        AM=M-1\n\
+        D=M\n\
+        @SP\n\
+        AM=M-1\n\
+        D=M-D\n\
+        @default.0\n\
+        D;JLT\n\
+        D=0\n\
+        @default.1\n\
+        0;JMP\n\
+        (default.0)\n\
+        D=-1\n\
+        (default.1)\n\
+        @SP\n\
+        A=M\n\
+        M=D\n\
+        @SP\n\
+        M=M+1\n";
+
+        assert_eq!(result, expected_result)
+    }
+}

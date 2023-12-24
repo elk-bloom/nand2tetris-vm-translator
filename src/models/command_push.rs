@@ -11,19 +11,8 @@ impl ToAssembly for CommandPush {
         // appears last in all of our assembly for CommandPush
         let push_stack_assembly = PushStack::to_assembly(cpu_state);
         match self.segment {
-            Segment::Argument
-            | Segment::Local
-            | Segment::This
-            | Segment::That
-            | Segment::Pointer => {
-                let segment_name: String = match self.segment {
-                    Segment::Pointer => match self.offset {
-                        0 => Segment::Argument.to_assembly(),
-                        1 => Segment::That.to_assembly(),
-                        _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°) TODO: handle error case
-                    },
-                    _ => self.segment.to_assembly(),
-                };
+            Segment::Argument | Segment::Local | Segment::This | Segment::That => {
+                let segment_name = self.segment.to_assembly();
 
                 if self.offset == 0 {
                     format!(
@@ -47,11 +36,26 @@ impl ToAssembly for CommandPush {
                     )
                 }
             }
+            Segment::Pointer => {
+                let segment_name: String = match self.offset {
+                    0 => Segment::This.to_assembly(),
+                    1 => Segment::That.to_assembly(),
+                    _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°) TODO: handle error case
+                };
+
+                format!(
+                    "\
+                    @{}\n\
+                    D=M\n\
+                    {}",
+                    segment_name, push_stack_assembly
+                )
+            }
             Segment::Constant => {
                 format!(
                     "\
                 @{}\n\
-                D=M\n\
+                D=A\n\
                 {}",
                     self.offset, push_stack_assembly
                 )

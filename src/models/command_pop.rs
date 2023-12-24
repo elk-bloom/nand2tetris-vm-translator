@@ -9,19 +9,8 @@ impl ToAssembly for CommandPop {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
         let pop_stack_assembly = PopStack::to_assembly(cpu_state);
         match self.segment {
-            Segment::Argument
-            | Segment::Local
-            | Segment::This
-            | Segment::That
-            | Segment::Pointer => {
-                let segment_name: String = match self.segment {
-                    Segment::Pointer => match self.offset {
-                        0 => Segment::Argument.to_assembly(),
-                        1 => Segment::That.to_assembly(),
-                        _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°) TODO: handle error case
-                    },
-                    _ => self.segment.to_assembly(),
-                };
+            Segment::Argument | Segment::Local | Segment::This | Segment::That => {
+                let segment_name = self.segment.to_assembly();
 
                 cpu_state.clear();
 
@@ -55,6 +44,26 @@ impl ToAssembly for CommandPop {
                         self.offset, segment_name, pop_stack_assembly
                     )
                 }
+            }
+            Segment::Pointer => {
+                let segment_name = match self.offset {
+                    0 => Segment::This.to_assembly(),
+                    1 => Segment::That.to_assembly(),
+                    _ => unreachable!(), // or it should be anyway ( ͡° ͜ʖ ͡°) TODO: handle error case
+                };
+
+                cpu_state.clear();
+                cpu_state
+                    .const_or_predefined_a_register
+                    .push_str(segment_name.as_str());
+
+                format!(
+                    "\
+                    {}\
+                    @{}\n\
+                    M=D\n",
+                    pop_stack_assembly, segment_name
+                )
             }
             Segment::Temp => {
                 // TODO: return error if outside of bounds

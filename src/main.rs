@@ -1,16 +1,11 @@
-mod errors;
-mod models;
-mod translators;
+use vm_translator::models::code_writer::CodeWriter;
+use vm_translator::parser;
+use vm_translator::translators::vm_translator::VMTranslator;
 
-mod parser;
-
-use std::fs::{self, File};
+use std::fs;
 use std::{env, path::PathBuf};
 
 use clap::Parser as ClapParser;
-use models::code_writer::CodeWriter;
-use parser::Parser;
-use translators::vm_translator::VMTranslator;
 
 #[derive(ClapParser)]
 #[command(author, version, about, long_about = None)]
@@ -91,7 +86,7 @@ fn main() {
             .map(|os_str| os_str.to_string_lossy().to_string())
             .unwrap();
         let mut parser = match option {
-            Options::Translate => Parser::new(file, VMTranslator::new(file_name)).unwrap(),
+            Options::Translate => parser::Parser::new(file, VMTranslator::new(file_name)).unwrap(),
             Options::Assemble => todo!(),
         };
         let out_path = file.with_extension(target_extension);
