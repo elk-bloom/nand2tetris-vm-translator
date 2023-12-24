@@ -4,7 +4,7 @@ mod translators;
 
 mod parser;
 
-use std::fs;
+use std::fs::{self, File};
 use std::{env, path::PathBuf};
 
 use clap::Parser as ClapParser;
@@ -86,8 +86,12 @@ fn main() {
     };
 
     for file in files.iter() {
+        let file_name = file
+            .file_stem()
+            .map(|os_str| os_str.to_string_lossy().to_string())
+            .unwrap();
         let mut parser = match option {
-            Options::Translate => Parser::new(file, VMTranslator::new()).unwrap(),
+            Options::Translate => Parser::new(file, VMTranslator::new(file_name)).unwrap(),
             Options::Assemble => todo!(),
         };
         let out_path = file.with_extension(target_extension);

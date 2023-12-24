@@ -20,8 +20,8 @@ impl ToAssembly for CommandArithmetic {
                 let prefix = cpu_state.get_prefix("SP", &RegisterType::A);
                 let main_assembly = format!(
                     "\
-                    A=M-1
-                    M={}",
+                    A=M-1\n\
+                    M={}\n",
                     operation
                 );
 
@@ -30,7 +30,7 @@ impl ToAssembly for CommandArithmetic {
                 match prefix {
                     Some(p) => format!(
                         "\
-                        {}
+                        {}\
                         {}",
                         p, main_assembly
                     ),
@@ -52,9 +52,9 @@ impl ToAssembly for CommandArithmetic {
                 let prefix = PopStack::to_assembly(cpu_state);
                 let main_assembly = format!(
                     "\
-                    @SP
-                    A=M-1
-                    M={}",
+                    @SP\n\
+                    A=M-1\n\
+                    M={}\n",
                     operation
                 );
 
@@ -62,7 +62,7 @@ impl ToAssembly for CommandArithmetic {
 
                 format!(
                     "\
-                    {}
+                    {}\
                     {}",
                     prefix, main_assembly
                 )
@@ -88,23 +88,23 @@ impl ToAssembly for CommandArithmetic {
 
                 format!(
                     "\
-                    {prefix}
-                    @SP
-                    AM=M-1
-                    D=M-D
-                    @{true_jump_label}
-                    D;{jump_condition}
-                    D=0
-                    @{false_jump_label}
-                    0;JMP
-                    ({true_jump_label})
-                    D=-1
-                    ({false_jump_label})
-                    @SP
-                    A=M
-                    M=D
-                    @SP
-                    M=M+1"
+                    {prefix}\
+                    @SP\n\
+                    AM=M-1\n\
+                    D=M-D\n\
+                    @{true_jump_label}\n\
+                    D;{jump_condition}\n\
+                    D=0\n\
+                    @{false_jump_label}\n\
+                    0;JMP\n\
+                    ({true_jump_label})\n\
+                    D=-1\n\
+                    ({false_jump_label})\n\
+                    @SP\n\
+                    A=M\n\
+                    M=D\n\
+                    @SP\n\
+                    M=M+1\n"
                 )
             }
         }

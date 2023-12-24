@@ -28,20 +28,20 @@ impl ToAssembly for CommandPush {
                 if self.offset == 0 {
                     format!(
                         "\
-                        @{}
-                        A=M
-                        D=M
+                        @{}\n\
+                        A=M\n\
+                        D=M\n\
                         {}",
                         segment_name, push_stack_assembly
                     )
                 } else {
                     format!(
                         "\
-                    @{}
-                    D=A
-                    @{}
-                    A=D+M
-                    D=M
+                    @{}\n\
+                    D=A\n\
+                    @{}\n\
+                    A=D+M\n\
+                    D=M\n\
                     {}",
                         self.offset, segment_name, push_stack_assembly
                     )
@@ -50,8 +50,8 @@ impl ToAssembly for CommandPush {
             Segment::Constant => {
                 format!(
                     "\
-                @{}
-                D=M
+                @{}\n\
+                D=M\n\
                 {}",
                     self.offset, push_stack_assembly
                 )
@@ -61,8 +61,8 @@ impl ToAssembly for CommandPush {
                 let index = 5 + self.offset;
                 format!(
                     "\
-                    @{}
-                    D=M
+                    @{}\n\
+                    D=M\n\
                     {}",
                     index, push_stack_assembly
                 )
@@ -72,8 +72,8 @@ impl ToAssembly for CommandPush {
                 let symbol = format!("{}.{}", cpu_state.loop_label_name, self.offset);
                 format!(
                     "\
-                    @{}
-                    D=M
+                    @{}\n\
+                    D=M\n\
                     {}",
                     symbol, push_stack_assembly
                 )

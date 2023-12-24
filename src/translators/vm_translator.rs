@@ -65,19 +65,19 @@ impl Translate for VMTranslator {
 
         Some(format!(
             "\
-            ({})
-            @{}
-            0;JMP",
+            ({})\n\
+            @{}\n\
+            0;JMP\n",
             jump_label, jump_label
         ))
     }
 }
 
 impl VMTranslator {
-    pub fn new() -> Self {
+    pub fn new(file_name: String) -> Self {
         VMTranslator {
             current_vm_instruction: String::new(),
-            cpu_state: CPUState::new(),
+            cpu_state: CPUState::new(file_name),
         }
     }
     /// Splits the current vm_instruction string on whitespace so that the command type and arguments are easily determinable by other functions without them having to do their own splitting.

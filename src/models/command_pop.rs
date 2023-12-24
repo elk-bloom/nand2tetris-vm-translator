@@ -28,30 +28,30 @@ impl ToAssembly for CommandPop {
                 if self.offset == 0 {
                     let main_assembly = format!(
                         "\
-                        @{}
-                        A=M
-                        M=D",
+                        @{}\n\
+                        A=M\n\
+                        M=D\n",
                         segment_name
                     );
                     format!(
                         "\
-                        {}
+                        {}\
                         {}",
                         pop_stack_assembly, main_assembly
                     )
                 } else {
                     format!(
                         "\
-                        @{}
-                        D=A
-                        @{}
-                        D=D+M
-                        @R13
-                        M=D
-                        {}
-                        @R13
-                        A=M
-                        M=D",
+                        @{}\n\
+                        D=A\n\
+                        @{}\n\
+                        D=D+M\n\
+                        @R13\n\
+                        M=D\n\
+                        {}\
+                        @R13\n\
+                        A=M\n\
+                        M=D\n",
                         self.offset, segment_name, pop_stack_assembly
                     )
                 }
@@ -67,9 +67,9 @@ impl ToAssembly for CommandPop {
 
                 format!(
                     "\
-                    {}
-                    @{}
-                    M=D",
+                    {}\
+                    @{}\n\
+                    M=D\n",
                     pop_stack_assembly, index
                 )
             }
@@ -84,9 +84,9 @@ impl ToAssembly for CommandPop {
 
                 format!(
                     "\
-                    {}
-                    @{}
-                    M=D",
+                    {}\
+                    @{}\n\
+                    M=D\n",
                     pop_stack_assembly, symbol
                 )
             }
