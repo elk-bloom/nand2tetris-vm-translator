@@ -83,7 +83,7 @@ impl VMTranslator {
         VMTranslator {
             current_vm_instruction: String::new(),
             cpu_state: CPUStateBuilder::new()
-                .loop_label_name(format!("RSRVD_LOOP_{file_stem}"))
+                .loop_label_name(format!("RSRVDLOOP{file_stem}"))
                 .static_variable_prefix(file_stem)
                 .build(),
         }

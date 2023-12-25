@@ -7,7 +7,7 @@ pub struct CommandPush {
 
 impl ToAssembly for CommandPush {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
-        cpu_state.clear(); // just do not feel like implementing the perfect solution to removing reduntant instructions
+        cpu_state.clear(); // just do not feel like implementing the perfect solution to removing redundant instructions
         let push_stack_assembly = PushStack::to_assembly(cpu_state);
         match self.segment {
             Segment::Argument | Segment::Local | Segment::This | Segment::That => {

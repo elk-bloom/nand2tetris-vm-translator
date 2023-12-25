@@ -7,6 +7,7 @@ pub struct CommandPop {
 
 impl ToAssembly for CommandPop {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
+        cpu_state.clear();
         let pop_stack_assembly = PopStack::to_assembly(cpu_state);
         match self.segment {
             Segment::Argument | Segment::Local | Segment::This | Segment::That => {
