@@ -42,7 +42,7 @@ impl ToAssembly for CommandArithmetic {
             | ArithmeticCommandType::And
             | ArithmeticCommandType::Or => {
                 let operation: &str = match self.arithmetic_command_type {
-                    ArithmeticCommandType::Add => "M+D",
+                    ArithmeticCommandType::Add => "D+M",
                     ArithmeticCommandType::Sub => "M-D",
                     ArithmeticCommandType::And => "D&M",
                     ArithmeticCommandType::Or => "D|M",
@@ -177,7 +177,7 @@ mod tests {
         D=M\n\
         @SP\n\
         A=M-1\n\
-        M=M+D\n";
+        M=D+M\n";
 
         assert_eq!(result, expected_result)
     }
@@ -362,7 +362,7 @@ mod tests {
         D=M\n\
         @SP\n\
         A=M-1\n\
-        M=M+D\n";
+        M=D+M\n";
 
         assert_eq!(result, expected_result)
     }
