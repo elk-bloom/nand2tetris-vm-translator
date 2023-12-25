@@ -76,7 +76,7 @@ impl ToAssembly for CommandArithmetic {
                 };
 
                 let prefix = PopStack::to_assembly(cpu_state);
-                let loop_label_name = cpu_state.loop_label_name.as_str();
+                let loop_label_name = cpu_state.loop_label_prefix.as_str();
                 let index = cpu_state.loop_label_count;
 
                 let true_jump_label = format!("{}.{}", loop_label_name, index);

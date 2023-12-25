@@ -304,7 +304,6 @@ fn push_constant_0() {
     assert_eq!(actual, expected)
 }
 
-
 #[test]
 fn push_constant_25() {
     let input = "push constant 25";
@@ -321,17 +320,18 @@ fn push_constant_25() {
 fn push_constant_subsequent() {
     let input_1 = "push constant 0";
     let input_2 = "push constant 25";
-    
+
     let mut translator = setup::translator();
-    
+
     let output_1 = translator.convert(input_1).unwrap();
     let output_2 = translator.convert(input_2).unwrap();
-    
+
     let actual = output_1 + output_2.as_ref();
 
-    let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/combination/subsequent_push_constant.txt")
-            .unwrap();
+    let expected = fs::read_to_string(
+        "tests/vm_translator_test/expected_outputs/combination/subsequent_push_constant.txt",
+    )
+    .unwrap();
 
     assert_eq!(actual, expected)
 }

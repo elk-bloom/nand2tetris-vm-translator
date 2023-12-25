@@ -7,8 +7,7 @@ pub struct CommandPush {
 
 impl ToAssembly for CommandPush {
     fn to_assembly(&self, cpu_state: &mut super::cpu_state::CPUState) -> String {
-        // the PushStack::to_assembly handles the update of cpu_state since it
-        // appears last in all of our assembly for CommandPush
+        cpu_state.clear(); // just do not feel like implementing the perfect solution to removing reduntant instructions
         let push_stack_assembly = PushStack::to_assembly(cpu_state);
         match self.segment {
             Segment::Argument | Segment::Local | Segment::This | Segment::That => {
@@ -73,7 +72,7 @@ impl ToAssembly for CommandPush {
             }
             Segment::Static => {
                 // TODO: ensure number of static variables is not greater than the reserved address space (16-255) can hold
-                let symbol = format!("{}.{}", cpu_state.loop_label_name, self.offset);
+                let symbol = format!("{}.{}", cpu_state.loop_label_prefix, self.offset);
                 format!(
                     "\
                     @{}\n\

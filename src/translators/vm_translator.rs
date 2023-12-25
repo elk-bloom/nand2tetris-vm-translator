@@ -63,7 +63,7 @@ impl Translate for VMTranslator {
     }
 
     fn termination_string(&mut self) -> Option<String> {
-        let loop_label_name = self.cpu_state.loop_label_name.as_str();
+        let loop_label_name = self.cpu_state.loop_label_prefix.as_str();
         let index = self.cpu_state.loop_label_count;
         let jump_label = format!("{}.{}", loop_label_name, index);
         self.cpu_state.loop_label_count += 1;
@@ -79,10 +79,13 @@ impl Translate for VMTranslator {
 }
 
 impl VMTranslator {
-    pub fn new(file_name: String) -> Self {
+    pub fn new(file_stem: String) -> Self {
         VMTranslator {
             current_vm_instruction: String::new(),
-            cpu_state: CPUStateBuilder::new().loop_label_name(file_name).build(),
+            cpu_state: CPUStateBuilder::new()
+                .loop_label_name(format!("RSRVD_LOOP_{file_stem}"))
+                .static_variable_prefix(file_stem)
+                .build(),
         }
     }
     /// Splits the current vm_instruction string on whitespace so that the command type and arguments are easily determinable by other functions without them having to do their own splitting.

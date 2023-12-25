@@ -84,7 +84,7 @@ impl ToAssembly for CommandPop {
             }
             Segment::Static => {
                 // TODO: ensure number of static variables is not greater than the reserved address space (16-255) can hold
-                let symbol = format!("{}.{}", cpu_state.loop_label_name, self.offset);
+                let symbol = format!("{}.{}", cpu_state.loop_label_prefix, self.offset);
 
                 cpu_state.clear();
                 cpu_state
