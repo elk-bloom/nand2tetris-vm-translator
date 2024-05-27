@@ -17,7 +17,7 @@ fn pop_arg_0() {
     let input = "pop argument 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_arg_0.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_arg_0.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -28,7 +28,7 @@ fn pop_arg_3() {
     let input = "pop argument 3";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_arg_3.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_arg_3.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -39,7 +39,7 @@ fn pop_local_0() {
     let input = "pop local 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_local_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_local_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -51,7 +51,7 @@ fn pop_local_2() {
     let input = "pop local 2";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_local_2.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_local_2.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -63,7 +63,7 @@ fn pop_pointer_0() {
     let input = "pop pointer 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_pointer_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_pointer_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -75,7 +75,7 @@ fn pop_pointer_1() {
     let input = "pop pointer 1";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_pointer_1.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_pointer_1.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -87,7 +87,7 @@ fn pop_temp_0() {
     let input = "pop temp 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_temp_0.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_temp_0.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -98,7 +98,7 @@ fn pop_temp_4() {
     let input = "pop temp 4";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_temp_4.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_temp_4.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -109,7 +109,7 @@ fn pop_that_0() {
     let input = "pop that 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_that_0.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_that_0.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -120,7 +120,7 @@ fn pop_that_7() {
     let input = "pop that 7";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_that_7.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_that_7.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -131,7 +131,7 @@ fn pop_this_0() {
     let input = "pop this 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_this_0.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_this_0.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -142,7 +142,7 @@ fn pop_this_4() {
     let input = "pop this 4";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/pop/pop_this_4.txt").unwrap();
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/pop/pop_this_4.txt").unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
     assert_eq!(actual, expected)
@@ -153,7 +153,7 @@ fn push_arg_0() {
     let input = "push argument 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_arg_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_arg_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -165,7 +165,7 @@ fn push_arg_3() {
     let input = "push argument 3";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_arg_3.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_arg_3.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -177,7 +177,7 @@ fn push_local_0() {
     let input = "push local 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_local_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_local_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -189,7 +189,7 @@ fn push_local_2() {
     let input = "push local 2";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_local_2.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_local_2.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -201,7 +201,7 @@ fn push_pointer_0() {
     let input = "push pointer 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_pointer_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_pointer_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -213,7 +213,7 @@ fn push_pointer_1() {
     let input = "push pointer 1";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_pointer_1.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_pointer_1.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -225,7 +225,7 @@ fn push_temp_0() {
     let input = "push temp 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_temp_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_temp_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -237,7 +237,7 @@ fn push_temp_4() {
     let input = "push temp 4";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_temp_4.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_temp_4.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -249,7 +249,7 @@ fn push_that_0() {
     let input = "push that 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_that_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_that_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -261,7 +261,7 @@ fn push_that_7() {
     let input = "push that 7";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_that_7.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_that_7.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -273,7 +273,7 @@ fn push_this_0() {
     let input = "push this 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_this_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_this_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -285,7 +285,7 @@ fn push_this_4() {
     let input = "push this 4";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_this_4.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_this_4.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -297,7 +297,7 @@ fn push_constant_0() {
     let input = "push constant 0";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_constant_0.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_constant_0.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -309,7 +309,7 @@ fn push_constant_25() {
     let input = "push constant 25";
 
     let expected =
-        fs::read_to_string("tests/vm_translator_test/expected_outputs/push/push_constant_25.txt")
+        fs::read_to_string("tests/expected_outputs_tests/expected_outputs/push/push_constant_25.txt")
             .unwrap();
     let actual = setup::translator().convert(input).unwrap();
 
@@ -329,7 +329,7 @@ fn push_constant_subsequent() {
     let actual = output_1 + output_2.as_ref();
 
     let expected = fs::read_to_string(
-        "tests/vm_translator_test/expected_outputs/combination/subsequent_push_constant.txt",
+        "tests/expected_outputs_tests/expected_outputs/combination/subsequent_push_constant.txt",
     )
     .unwrap();
 
